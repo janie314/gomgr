@@ -3,6 +3,8 @@ require "semantic_logger"
 
 SemanticLogger.add_appender(io: $stdout, formatter: :color)
 
-get "/golang" do
-  "hootenanny"
+class Server < Sinatra::Base
+  get "/golang" do
+    "hootenanny"
+  end
 end
