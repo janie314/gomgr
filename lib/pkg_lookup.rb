@@ -1,4 +1,5 @@
 require "faraday"
+require "rufus-scheduler"
 require_relative "../lib/schema"
 
 class PkgLookup
@@ -7,7 +8,7 @@ class PkgLookup
   end
 
   def lookup
-    @lookup ||= {}
+    @lookup ||= ""
   end
 
   def query_versions
@@ -22,7 +23,11 @@ class PkgLookup
   def update
     res = query_versions.get.body
     if Schema.query_versions.valid? res
-      @lookup = res
+      if res.length == 0
+        l.error "blank golist..."
+      else
+        @lookup = res[0]["version"]
+      end
     else
       l.error "invalid schema from go.dev query"
     end
@@ -30,5 +35,6 @@ class PkgLookup
 
   def initialize
     update
+    Rufus::Scheduler.new.cron "30 0 * * *" do update end
   end
 end

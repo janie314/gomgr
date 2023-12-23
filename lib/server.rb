@@ -1,18 +1,21 @@
 require "sinatra/base"
 require "semantic_logger"
+require_relative "pkg_lookup"
 
 SemanticLogger.add_appender(io: $stdout, formatter: :color)
 
 class Server < Sinatra::Base
-  def lookup
-    @lookup ||= PkgLookup.new
+  def pkg_lookup
+    @pkg_lookup ||= PkgLookup.new
   end
 
   set :port, (ENV["GOLANG_LATEST_PORT"] || 50005).to_i
   enable :logging
 
-  get "/golang/" do
-    redirect "https://go.dev/", 303
+  get "/golang/:platform" do
+    version = pkg_lookup.lookup
+    platform = params["platform"]
+    redirect "https://go.dev/dl/#{version}.#{platform}.tar.gz", 303
   end
 
   not_found do
