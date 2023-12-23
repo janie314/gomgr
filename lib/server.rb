@@ -5,12 +5,13 @@ require_relative "pkg_lookup"
 SemanticLogger.add_appender(io: $stdout, formatter: :color)
 
 class Server < Sinatra::Base
+  set :port, (ENV["GOLANG_LATEST_PORT"] || 50005).to_i
+  enable :logging
+  disable :show_exceptions
+
   def pkg_lookup
     @pkg_lookup ||= PkgLookup.new
   end
-
-  set :port, (ENV["GOLANG_LATEST_PORT"] || 50005).to_i
-  enable :logging
 
   get "/golang/:platform" do
     version = pkg_lookup.lookup
