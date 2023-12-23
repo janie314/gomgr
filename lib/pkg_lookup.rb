@@ -27,4 +27,8 @@ class PkgLookup
       l.error "invalid schema from go.dev query"
     end
   end
+
+  def initialize
+    update
+  end
 end

@@ -4,6 +4,10 @@ require "semantic_logger"
 SemanticLogger.add_appender(io: $stdout, formatter: :color)
 
 class Server < Sinatra::Base
+  def lookup
+    @lookup ||= PkgLookup.new
+  end
+
   set :port, (ENV["GOLANG_LATEST_PORT"] || 50005).to_i
   enable :logging
 
