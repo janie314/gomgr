@@ -13,8 +13,17 @@ class Server < Sinatra::Base
     @pkg_lookup ||= PkgLookup.new
   end
 
-  get "/golang/:platform" do
-    version = pkg_lookup.lookup
+  get "/golang/checksum/:platform" do
+    checksum = pkg_lookup.lookup.checksums[params["platform"]]
+    if checksum.nil?
+      404
+    else
+      checksum
+    end
+  end
+
+  get "/golang/dl/:platform" do
+    version = pkg_lookup.lookup.version
     platform = params["platform"]
     redirect "https://go.dev/dl/#{version}.#{platform}.tar.gz", 303
   end

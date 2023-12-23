@@ -8,7 +8,7 @@ class PkgLookup
   end
 
   def lookup
-    @lookup ||= ""
+    @lookup ||= {}
   end
 
   def query_versions
@@ -26,7 +26,13 @@ class PkgLookup
       if res.length == 0
         l.error "blank golist..."
       else
-        @lookup = res[0]["version"]
+        @lookup = {
+          version => res[0]["version"],
+          checksums => (res[0].map do |entry|
+            [entry["os"] + "-" + entry["arch"], entry["sha256"]]
+          end).to_h
+        }
+        puts @lookup
       end
     else
       l.error "invalid schema from go.dev query"
