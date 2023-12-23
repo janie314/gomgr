@@ -11,3 +11,5 @@ gem "sinatra", "~> 3.1"
 gem "json_schemer", "~> 2.1"
 
 gem "puma", "~> 6.4"
+
+gem "rufus-scheduler", "~> 3.9"
