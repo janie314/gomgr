@@ -27,8 +27,8 @@ class PkgLookup
         l.error "blank golist..."
       else
         @lookup = {
-          version => res[0]["version"],
-          checksums => (res[0].map do |entry|
+          "version" => res[0]["version"],
+          "checksums" => (res[0]["files"].map do |entry|
             [entry["os"] + "-" + entry["arch"], entry["sha256"]]
           end).to_h
         }
