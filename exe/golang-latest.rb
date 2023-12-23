@@ -1,1 +1,1 @@
-SemanticLogger.add_appender(io: $stdout, formatter: :color)
+require_relative "../lib/server"
