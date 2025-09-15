@@ -1,0 +1,25 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - release
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: testing and linting this branch
+    steps:
+      - name: check out this repo
+        uses: actions/checkout@v5
+        with:
+          lfs: true
+      - name: setup uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: run formatter
+        run: |
+          uv run black . --include gomgr
+      - name: check for TODO string instances
+        run: |
+          git ls-files | grep -v test-branch\.yml | xargs grep -Ii todo | wc -l | xargs ruby -e 'exit ARGV[0].to_i == 0'
