@@ -19,7 +19,13 @@ jobs:
           enable-cache: true
       - name: run formatter
         run: |
-          uv run black . --include gomgr
+          make fmt
+          git status -s 2>/dev/null | wc -l | xargs uv run python3 -c "import sys; sys.exit(1 if int(sys.argv[1])>0 else 0)"
+      - name: run compiler
+        run: |
+          make compile
+          git status -s 2>/dev/null | wc -l | xargs uv run python3 -c "import sys; sys.exit(1 if int(sys.argv[1])>0 else 0)"
+ 
       - name: check for TODO string instances
         run: |
           git ls-files | grep -v test-branch\.yml | xargs grep -Ii todo | wc -l | xargs ruby -e 'exit ARGV[0].to_i == 0'
