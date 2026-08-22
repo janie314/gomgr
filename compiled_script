@@ -1,7 +1,7 @@
 #!/bin/sh
 cat <<EOF | uv run --script -
 # /// script
-# requires-python = ">=3.13"
+# requires-python = ">=3.14"
 # dependencies = [
 #     "requests",
 # ]
