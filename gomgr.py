@@ -5,19 +5,18 @@
 # ]
 # ///
 import os
+import shutil
 import subprocess
 import tarfile
+
 import requests
-import shutil
 
 # 1. Get current Go version if installed
 go_path = shutil.which("go")
 current_go_version = None
 if go_path:
     try:
-        result = subprocess.run(
-            ["go", "version"], capture_output=True, text=True, check=True
-        )
+        result = subprocess.run(["go", "version"], capture_output=True, text=True, check=True)
         version_output = result.stdout.strip().split()
         if len(version_output) >= 3:
             current_go_version = version_output[2]
@@ -87,9 +86,7 @@ if not go_path or (current_go_version and current_go_version != latest_go_versio
                 print(f"Created symlink: {dst} -> {src}")
 
             print("\nInstallation successful! 🚀")
-            print(
-                f"Make sure {local_bin_dir} is in your PATH. You may need to restart your terminal."
-            )
+            print(f"Make sure {local_bin_dir} is in your PATH. You may need to restart your terminal.")
 
         except (requests.exceptions.RequestException, tarfile.TarError, OSError) as e:
             print(f"An error occurred during installation: {e}")
